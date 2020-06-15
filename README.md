@@ -1,2 +1,2 @@
 # entur-mock-kafka-consumer
-A mock kafka-consumer using entur data
+A mock kafka-consumer consuming entur data
