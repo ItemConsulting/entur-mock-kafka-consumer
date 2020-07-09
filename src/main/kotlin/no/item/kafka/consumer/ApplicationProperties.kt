@@ -17,7 +17,7 @@ fun getProperties(): Properties {
     )
     put(ConsumerConfig.GROUP_ID_CONFIG, "EnturMockKafkaConsumerGroup")
     put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer().javaClass.name)
-    put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.connect.json.JsonSerializer")
+    put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer().javaClass.name)
     put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
     put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
   }

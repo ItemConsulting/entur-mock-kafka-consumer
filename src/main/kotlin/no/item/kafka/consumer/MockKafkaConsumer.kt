@@ -7,7 +7,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-fun main(args: Array<String>) {
+fun main() {
   MockKafkaConsumer().run()
 }
 
@@ -28,7 +28,6 @@ class MockKafkaConsumer {
       records.iterator().forEach {
         val record: String = it.value()
         println(record)
-
       }
       consumer.close()
     }
