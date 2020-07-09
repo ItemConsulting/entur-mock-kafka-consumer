@@ -17,15 +17,20 @@ class MockKafkaConsumer {
     logger.info("Starting consumer")
     val props: Properties = getProperties()
     val consumer: KafkaConsumer<String, String> = KafkaConsumer<String, String>(props)
-    consumer.subscribe(Collections.singleton("entur.vehicle.activity"))
+    consumer.subscribe(Collections.singleton("EnturMockKafka-topic1"))
 
     while (true) {
-      val records: ConsumerRecords<String, String> = consumer.poll(Duration.ofMillis(100))
+      val records: ConsumerRecords<String, String> = consumer.poll(Duration.ofMillis(1000))
+      if (records.count() == 0) {
+        continue
+      }
       logger.info("Got some records...")
       records.iterator().forEach {
-        val record = it.value()
-        // TODO:do something with this record...
+        val record: String = it.value()
+        println(record)
+
       }
+      consumer.close()
     }
   }
 }
