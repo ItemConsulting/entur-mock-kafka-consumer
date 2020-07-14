@@ -1,5 +1,9 @@
 package no.item.kafka.consumer
 
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 import java.time.Duration
 import java.util.*
 import org.apache.kafka.clients.consumer.ConsumerRecords
@@ -13,10 +17,16 @@ fun main() {
 
 class MockKafkaConsumer {
   private val logger: Logger = LoggerFactory.getLogger(javaClass)
+  private val fileName = "logfile.txt"
+  private val file = File(fileName)
+  @Suppress("UNUSED_VARIABLE")
   fun run() {
-    logger.info("Starting consumer")
+    val isNewFileCreated: Boolean = file.createNewFile()
+    val startup = "Starting consumer\n"
+    writeToFile(startup)
+
     val props: Properties = getProperties()
-    val consumer: KafkaConsumer<String, String> = KafkaConsumer<String, String>(props)
+    val consumer: KafkaConsumer<String, String> = KafkaConsumer(props)
     consumer.subscribe(Collections.singleton("EnturMockKafka-topic1"))
 
     while (true) {
@@ -24,12 +34,17 @@ class MockKafkaConsumer {
       if (records.count() == 0) {
         continue
       }
-      logger.info("Got some records...")
+      val text = "Got some records...."
+      writeToFile(text)
       records.iterator().forEach {
         val record: String = it.value()
-        println(record)
+        writeToFile(record)
       }
       consumer.close()
     }
+  }
+  private fun writeToFile(message: String) {
+    logger.info(message)
+    Files.write(Paths.get(file.absolutePath), message.toByteArray(), StandardOpenOption.APPEND)
   }
 }
