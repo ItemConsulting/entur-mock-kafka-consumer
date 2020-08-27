@@ -13,7 +13,6 @@ plugins {
 
 group = "no.item.kafka.consumer"
 version = "1.0.0-SNAPSHOT"
-val arrowVersion = "0.10.4"
 
 repositories {
   mavenCentral()
@@ -24,14 +23,8 @@ dependencies {
   implementation("org.apache.kafka:kafka-clients:2.0.0")
   implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("io.arrow-kt:arrow-core:$arrowVersion")
-  implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
-  kapt("io.arrow-kt:arrow-meta:$arrowVersion")
   testImplementation("org.jetbrains.kotlin:kotlin-test")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.8.11.1")
-  implementation("com.fasterxml.jackson.core:jackson-databind:2.8.9")
-  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.1")
 }
 
 ktlint {

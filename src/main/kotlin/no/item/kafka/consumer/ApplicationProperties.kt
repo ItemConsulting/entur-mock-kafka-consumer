@@ -1,14 +1,10 @@
 package no.item.kafka.consumer
 
-import java.util.*
-import org.apache.kafka.clients.CommonClientConfigs
+import java.util.Properties
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
-import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.serialization.StringDeserializer
 
-// TODO: gå gjennom configen og finne ut hva som trengs for å knyttes mot entur...
-// https://kafka.apache.org/documentation/#consumerconfigs
 fun getProperties(): Properties {
   val properties = Properties()
   with(properties) {
