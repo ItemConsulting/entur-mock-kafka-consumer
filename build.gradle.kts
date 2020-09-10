@@ -8,6 +8,8 @@ plugins {
   application
   id("org.jetbrains.kotlin.jvm") version "1.3.61"
   id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
+  id("com.bmuschko.docker-remote-api") version "6.5.0"
+  id("org.jetbrains.kotlin.plugin.serialization") version "1.3.70"
   kotlin("kapt") version "1.3.61"
 }
 
@@ -60,15 +62,44 @@ val fatJar = task("fatJar", type = Jar::class) {
   with(tasks.jar.get() as CopySpec)
 }
 
+val buildImage = task("buildImage", com.bmuschko.gradle.docker.tasks.image.DockerBuildImage::class) {
+  inputDir.set(file("."))
+  images.add(".....eu-north-1.amazonaws.com/kafka-consumer:latest") //TODO:Add rikitg server
+}
+
+val pushImage = task("pushImage", com.bmuschko.gradle.docker.tasks.image.DockerPushImage::class) {
+  dependsOn(buildImage)
+  images.add("...eu-north-1.amazonaws.com/kafka-consumer:latest") //TODO:Add rikitg server
+}
+
+val dockerInit = task("dockerInit", Exec::class) {
+  workingDir = file(".")
+  commandLine = listOf("./docker-login.sh")
+}
+val dockerInitWin = task("dockerInitWin", Exec::class) {
+  workingDir = file(".")
+  commandLine = listOf("cmd", "/c", "docker-login.bat")
+}
+
+tasks.register("deploy") {
+  dependsOn(tasks.build)
+  dependsOn(pushImage)
+}
+
+tasks.register("docker-init") {
+  dependsOn(dockerInit)
+}
+
+tasks.register("docker-init-win") {
+  dependsOn(dockerInitWin)
+}
+
 tasks {
+  startScripts {
+    mainClassName = "no.item.kafka.consumer.MockKafkaConsumer"
+  }
   build {
     dependsOn(fatJar)
   }
 }
 
-tasks {
-  startScripts {
-    dependsOn(fatJar)
-    mainClassName = "no.item.kafka.consumer.MockKafkaConsumer"
-  }
-}
